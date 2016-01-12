@@ -27,7 +27,7 @@ public extension Unit {
     }
 }
 
-extension Unit {
+public extension Unit {
     static func convertToBase(prefix: Prefix, power: Double, value: Double) -> Double {
         return pow(prefix.rawValue, power) * value
     }
@@ -52,6 +52,10 @@ func / <U: Unit>(lhs: U, rhs: Double) -> U {
 
 func + <U: Unit>(lhs: U, rhs: U) -> U {
     return U(value: lhs.value + rhs.value)
+}
+
+func - <U: Unit>(lhs: U, rhs: U) -> U {
+    return U(value: lhs.value - rhs.value)
 }
 
 // MARK: Prefix System
@@ -267,21 +271,21 @@ public struct Angle: Unit {
     public var value: Double
     public let baseSymbol = "radians"
     
-    public var rad: Double {
+    public var radians: Double {
         return value
     }
-    public var deg: Double {
-        return 2 * 3.14 * value
+    public var degrees: Double {
+        return 180 * value / M_PI
     }
     
     public init(value: Double) {
         self.value = value
     }
-    public init(rad: Double) {
-        self.value = rad
+    public init(radians: Double) {
+        self.value = radians
     }
-    public init(deg: Double) {
-        self.value = deg / 2 / 3.14
+    public init(degrees: Double) {
+        self.value = M_PI * degrees / 180
     }
 }
 
@@ -564,6 +568,79 @@ public struct FLOP: Unit {
     }
     
 }
+
+// MARK: Global Coordinates
+
+public struct Latitude: Unit {
+    public var value: Double
+    public var baseSymbol: String = "φ"
+    
+    public var radians: Double {
+        return value
+    }
+    public var degrees: Double {
+        return 180 * value / M_PI
+    }
+    
+    public init(value: Double) {
+        self.value = value
+    }
+    public init(radians: Double) {
+        self.value = radians
+    }
+    public init(degrees: Double) {
+        self.value = M_PI * degrees / 180
+    }
+}
+
+public struct Longitude: Unit {
+    public var value: Double
+    public var baseSymbol: String = "λ"
+    
+    public var radians: Double {
+        return value
+    }
+    public var degrees: Double {
+        return 180 * value / M_PI
+    }
+    
+    public init(value: Double) {
+        self.value = value
+    }
+    public init(radians: Double) {
+        self.value = radians
+    }
+    public init(degrees: Double) {
+        self.value = M_PI * degrees / 180
+    }
+}
+
+public struct Coordinate {
+    public let latitude: Latitude
+    public let longitude: Longitude
+    
+    public let radiusOfEarth = Length(km: 6373)
+    
+    public init(latitude: Latitude, longitude: Longitude) {
+        self.latitude = latitude
+        self.longitude = longitude
+    }
+    
+    public func distanceFrom(coordinate: Coordinate) -> Length {
+        let(dLat, dLon) = (latitude - coordinate.latitude, longitude - coordinate.longitude)
+        let (sqSinLat, sqSinLon) = (pow(sin(dLat.radians / 2.0), 2.0), pow(sin(dLon.radians / 2.0), 2.0))
+        let a = sqSinLat + sqSinLon * cos(latitude.radians) * cos(coordinate.latitude.radians)
+        let c = 2.0 * atan2(sqrt(a), sqrt(1.0 - a))
+        return c * radiusOfEarth
+    }
+}
+
+/*
+let (sqSinLat, sqSinLon) = (pow(sin(dLat° / 2.0), 2.0), pow(sin(dLon° / 2.0), 2.0))
+        let a = sqSinLat + sqSinLon * cos(latitude°) * cos(coordinate.latitude°)
+        let c = 2.0 * atan2(sqrt(a), sqrt(1.0 - a))
+        return c * radius.rawValue
+*/
 
 // MARK: Operators
 // MARK: Multiplication
