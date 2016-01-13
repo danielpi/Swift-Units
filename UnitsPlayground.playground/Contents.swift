@@ -19,6 +19,8 @@ let torque = power / AngularVelocity(rpm: 1500)
 
 let force = torque / Length(cm: 5)
 
+let force2 = Mass(kg: 13) * Acceleration(mps2: 0.5)
+let force3 = Force(mass: 13.0, acceleration: 0.5)
 
 // How fast would that force accelerate a 100 gram load
 

@@ -1,7 +1,7 @@
 import Cocoa
 
 // MARK: Base Protocol
-public protocol Unit: CustomStringConvertible {
+public protocol Unit: CustomStringConvertible, FloatLiteralConvertible {
     var value: Double { get set }
     var baseSymbol: String { get }
     
@@ -36,7 +36,13 @@ public extension Unit {
         return value / pow(prefix.rawValue, power)
     }
 }
-
+/*
+extension Unit {
+    init(floatLiteral: FloatLiteralType) {
+        self.init(Double(floatLiteral))
+    }
+}
+*/
 
 // MARK: Generic Functions
 public func * <U: Unit>(lhs: Double, rhs: U) -> U {
@@ -128,6 +134,9 @@ public struct Mass: Unit {
         return value / Prefix.kilo.rawValue
     }
     
+    public init(floatLiteral: FloatLiteralType) {
+        self.value = Double(floatLiteral)
+    }
     public init(value: Double) {
         self.value = value
     }
@@ -154,6 +163,9 @@ public struct Volume: Unit {
     public var cm3: Double { return Volume.convertToPrefix(.centi, power: power, value: value) }
     public var mm3: Double { return Volume.convertToPrefix(.milli, power: power, value: value) }
     
+    public init(floatLiteral: FloatLiteralType) {
+        self.value = Double(floatLiteral)
+    }
     public init(value: Double) {
         self.value = value
     }
@@ -179,6 +191,9 @@ public struct Area: Unit {
     public var cm2: Double { return Area.convertToPrefix(.centi, power: power, value: value) }
     public var km2: Double { return Area.convertToPrefix( .kilo, power: power, value: value) }
     
+    public init(floatLiteral: FloatLiteralType) {
+        self.value = Double(floatLiteral)
+    }
     public init(value: Double) {
         self.value = value
     }
@@ -204,6 +219,10 @@ public struct Length: Unit {
     }
     public var km: Double {
         return value / 1000
+    }
+    
+    public init(floatLiteral: FloatLiteralType) {
+        self.value = Double(floatLiteral)
     }
     
     public init(value: Double) {
@@ -237,6 +256,9 @@ public struct Velocity: Unit {
         return 60 * 60 * value / 1000
     }
     
+    public init(floatLiteral: FloatLiteralType) {
+        self.value = Double(floatLiteral)
+    }
     public init(value: Double) {
         self.value = value
     }
@@ -259,6 +281,9 @@ public struct Acceleration: Unit {
         return value
     }
     
+    public init(floatLiteral: FloatLiteralType) {
+        self.value = Double(floatLiteral)
+    }
     public init(value: Double) {
         self.value = value
     }
@@ -278,6 +303,9 @@ public struct Angle: Unit {
         return 180 * value / M_PI
     }
     
+    public init(floatLiteral: FloatLiteralType) {
+        self.value = Double(floatLiteral)
+    }
     public init(value: Double) {
         self.value = value
     }
@@ -300,6 +328,9 @@ public struct VolumeFlowRate: Unit {
         return 1000 * 1000 * 1000 * value
     }
     
+    public init(floatLiteral: FloatLiteralType) {
+        self.value = Double(floatLiteral)
+    }
     public init(value: Double) {
         self.value = value
     }
@@ -322,6 +353,9 @@ public struct MassFlowRate: Unit {
         return 60 * 60 * value / 1000
     }
     
+    public init(floatLiteral: FloatLiteralType) {
+        self.value = Double(floatLiteral)
+    }
     public init(value: Double) {
         self.value = value
     }
@@ -344,6 +378,9 @@ public struct Density: Unit, CustomStringConvertible {
         return value
     }
     
+    public init(floatLiteral: FloatLiteralType) {
+        self.value = Double(floatLiteral)
+    }
     public init(value: Double) {
         self.value = value
     }
@@ -368,6 +405,9 @@ public struct MassPerLength: Unit {
         return value
     }
     
+    public init(floatLiteral: FloatLiteralType) {
+        self.value = Double(floatLiteral)
+    }
     public init(value: Double) {
         self.value = value
     }
@@ -387,6 +427,10 @@ public struct Force: Unit {
         return value / 1000
     }
     
+    public init(floatLiteral: FloatLiteralType) {
+        self.value = Double(floatLiteral)
+    }
+    
     public init(value: Double) {
         self.value = value
     }
@@ -395,6 +439,10 @@ public struct Force: Unit {
     }
     public init(kN: Double) {
         self.value = 1000 * kN
+    }
+    
+    public init(mass: Mass, acceleration: Acceleration) {
+        self.value = mass.kg * acceleration.mps2
     }
 }
 
@@ -412,6 +460,9 @@ public struct Power: Unit {
         return value / 1_000_000
     }
     
+    public init(floatLiteral: FloatLiteralType) {
+        self.value = Double(floatLiteral)
+    }
     public init(value: Double) {
         self.value = value
     }
@@ -443,6 +494,9 @@ public struct Time: Unit {
         return 1000 * value
     }
     
+    public init(floatLiteral: FloatLiteralType) {
+        self.value = Double(floatLiteral)
+    }
     public init(value: Double) {
         self.value = value
     }
@@ -465,6 +519,9 @@ public struct Torque: Unit {
     public var value: Double
     public let baseSymbol = "Nm"
     
+    public init(floatLiteral: FloatLiteralType) {
+        self.value = Double(floatLiteral)
+    }
     public init(value: Double) {
         self.value = value
     }
@@ -495,6 +552,9 @@ public struct AngularVelocity: Unit {
         return 2 * 3.14 * value / 60
     }
     
+    public init(floatLiteral: FloatLiteralType) {
+        self.value = Double(floatLiteral)
+    }
     public init(value: Double) {
         self.value = value
     }
@@ -519,6 +579,9 @@ public struct Current: Unit {
         return value / Prefix.milli.rawValue
     }
     
+    public init(floatLiteral: FloatLiteralType) {
+        self.value = Double(floatLiteral)
+    }
     public init(value: Double) {
         self.value = value
     }
@@ -544,6 +607,9 @@ public struct Voltage: Unit {
         return  value / Prefix.kilo.rawValue
     }
     
+    public init(floatLiteral: FloatLiteralType) {
+        self.value = Double(floatLiteral)
+    }
     public init(value: Double) {
         self.value = value
     }
@@ -563,6 +629,9 @@ public struct FLOP: Unit {
     public var value: Double
     public let baseSymbol = "FLOP"
     
+    public init(floatLiteral: FloatLiteralType) {
+        self.value = Double(floatLiteral)
+    }
     public init(value: Double) {
         self.value = value
     }
@@ -601,6 +670,9 @@ public struct Latitude: Unit {
         return 180 * value / M_PI
     }
     
+    public init(floatLiteral: FloatLiteralType) {
+        self.value = Double(floatLiteral)
+    }
     public init(value: Double) {
         self.value = value
     }
@@ -646,6 +718,9 @@ public struct Longitude: Unit {
         return 180 * value / M_PI
     }
     
+    public init(floatLiteral: FloatLiteralType) {
+        self.value = Double(floatLiteral)
+    }
     public init(value: Double) {
         self.value = value
     }
@@ -713,11 +788,18 @@ public func * (lhs: Length, rhs: MassPerLength) -> Mass {
     return Mass(kg: lhs.m * rhs.kgpm)
 }
 
+// F = ma
 public func * (lhs: Mass, rhs: Acceleration) -> Force {
     return Force(N: lhs.kg * rhs.mps2)
 }
 public func * (lhs: Acceleration, rhs: Mass) -> Force {
     return Force(N: lhs.mps2 * rhs.kg)
+}
+public func / (lhs: Force, rhs: Mass) -> Acceleration {
+    return Acceleration(mps2: lhs.N / rhs.kg)
+}
+public func / (lhs: Force, rhs: Acceleration) -> Mass {
+    return Mass(kg: lhs.N / rhs.mps2)
 }
 
 public func * (lhs: Force, rhs: Velocity) -> Power {
@@ -768,9 +850,7 @@ public func / (lhs: Power, rhs: AngularVelocity) -> Torque {
 public func / (lhs: Torque, rhs: Length) -> Force {
     return Force(N: lhs.Nm / rhs.m)
 }
-public func / (lhs: Force, rhs: Mass) -> Acceleration {
-    return Acceleration(mps2: lhs.N / rhs.kg)
-}
+
 
 // MARK: Common Constants
 public let gravity = Acceleration(mps2: 9.81)
