@@ -39,22 +39,22 @@ public extension Unit {
 
 
 // MARK: Generic Functions
-func * <U: Unit>(lhs: Double, rhs: U) -> U {
+public func * <U: Unit>(lhs: Double, rhs: U) -> U {
     return U(value: lhs * rhs.value)
 }
-func * <U: Unit>(lhs: U, rhs: Double) -> U {
+public func * <U: Unit>(lhs: U, rhs: Double) -> U {
     return U(value: lhs.value * rhs)
 }
 
-func / <U: Unit>(lhs: U, rhs: Double) -> U {
+public func / <U: Unit>(lhs: U, rhs: Double) -> U {
     return U(value: lhs.value / rhs)
 }
 
-func + <U: Unit>(lhs: U, rhs: U) -> U {
+public func + <U: Unit>(lhs: U, rhs: U) -> U {
     return U(value: lhs.value + rhs.value)
 }
 
-func - <U: Unit>(lhs: U, rhs: U) -> U {
+public func - <U: Unit>(lhs: U, rhs: U) -> U {
     return U(value: lhs.value - rhs.value)
 }
 
@@ -572,7 +572,26 @@ public struct FLOP: Unit {
 // MARK: Global Coordinates
 
 public struct Latitude: Unit {
-    public var value: Double
+    var _value: Double = 0
+    public var value: Double {
+        set {
+            func iter(v: Double) -> Double {
+                switch v {
+                case let a where a > (M_PI / 2):
+                    return iter(a - M_PI)
+                case let b where b < -(M_PI / 2):
+                    return iter(b + M_PI)
+                default:
+                    return v
+                }
+            }
+            
+            self._value = iter(newValue)
+        }
+        get {
+            return self._value
+        }
+    }
     public var baseSymbol: String = "φ"
     
     public var radians: Double {
@@ -591,10 +610,33 @@ public struct Latitude: Unit {
     public init(degrees: Double) {
         self.value = M_PI * degrees / 180
     }
+    
+    public var description: String {
+        return "\(String(format: "%.6f", self.degrees))\(baseSymbol)"
+    }
 }
 
 public struct Longitude: Unit {
-    public var value: Double
+    var _value: Double = 0
+    public var value: Double {
+        set {
+            func iter(v: Double) -> Double {
+                switch v {
+                case let a where a > M_PI:
+                    return iter(a - (2 * M_PI))
+                case let b where b < -M_PI:
+                    return iter(b + (2 * M_PI))
+                default:
+                    return v
+                }
+            }
+            
+            self._value = iter(newValue)
+        }
+        get {
+            return self._value
+        }
+    }
     public var baseSymbol: String = "λ"
     
     public var radians: Double {
@@ -613,9 +655,13 @@ public struct Longitude: Unit {
     public init(degrees: Double) {
         self.value = M_PI * degrees / 180
     }
+    
+    public var description: String {
+        return "\(String(format: "%.6f", self.degrees))\(baseSymbol)"
+    }
 }
 
-public struct Coordinate {
+public struct Coordinate: CustomStringConvertible {
     public let latitude: Latitude
     public let longitude: Longitude
     
@@ -633,14 +679,12 @@ public struct Coordinate {
         let c = 2.0 * atan2(sqrt(a), sqrt(1.0 - a))
         return c * radiusOfEarth
     }
+    
+    public var description: String {
+        return "\(latitude) \(longitude)"
+    }
 }
 
-/*
-let (sqSinLat, sqSinLon) = (pow(sin(dLat° / 2.0), 2.0), pow(sin(dLon° / 2.0), 2.0))
-        let a = sqSinLat + sqSinLon * cos(latitude°) * cos(coordinate.latitude°)
-        let c = 2.0 * atan2(sqrt(a), sqrt(1.0 - a))
-        return c * radius.rawValue
-*/
 
 // MARK: Operators
 // MARK: Multiplication

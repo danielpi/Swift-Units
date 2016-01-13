@@ -86,4 +86,21 @@ let whitehouse = Coordinate(latitude: Latitude(degrees: 38.898556), longitude: L
 let fstreet = Coordinate(latitude: Latitude(degrees: 38.897147), longitude: Longitude(degrees: -77.043934))
 whitehouse.distanceFrom(fstreet)
 
+let testPoint = Coordinate(latitude: Latitude(degrees: 89), longitude: Longitude(degrees: 0))
+let testPoint2 = Coordinate(latitude: Latitude(degrees: 89), longitude: Longitude(degrees: 1))
+testPoint2.distanceFrom(testPoint).km
+
+
+Latitude(degrees: 10)
+Longitude(degrees: 195)
+let h = Latitude(degrees: 10)
+let i = Latitude(degrees: 85)
+h
+i
+(h + i)
+
+(Latitude(degrees: 10) + Latitude(degrees: 85))
+Latitude(degrees: 10 + 90)
+
+Length(m: 5) + Length(m: 50)
 
