@@ -11,4 +11,8 @@ Turns out heaps of others have already tried this. Here are some examples
 - units in Haskell, <https://github.com/goldfirere/units>
 - Units of Measure in F#, <http://research.microsoft.com/en-us/um/people/akenn/units/index.html>
 
+I also shouldn't forget about significant digits (precision) and measurement uncertainty (e.g., 5 +- 0.2 meters) 
+- http://hep.physics.indiana.edu/~rickv/Quantities.html
+- http://www.roboticsengineeringcte502.com/blog---computational-scientist/why-computing-with-measured-quantities-is-hard
+
 Grab the playground and try it out.

@@ -12,6 +12,7 @@
 		E632F6631C411BAA00B5081A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E632F6621C411BAA00B5081A /* Assets.xcassets */; };
 		E632F6661C411BAA00B5081A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E632F6641C411BAA00B5081A /* Main.storyboard */; };
 		E632F6711C411BAB00B5081A /* Swift_UnitsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E632F6701C411BAB00B5081A /* Swift_UnitsTests.swift */; };
+		E6427E6D1C52602E00E7DC30 /* Units.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6427E6C1C52602E00E7DC30 /* Units.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +35,7 @@
 		E632F66C1C411BAB00B5081A /* Swift-UnitsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Swift-UnitsTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E632F6701C411BAB00B5081A /* Swift_UnitsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swift_UnitsTests.swift; sourceTree = "<group>"; };
 		E632F6721C411BAB00B5081A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E6427E6C1C52602E00E7DC30 /* Units.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Units.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +77,7 @@
 		E632F65D1C411BAA00B5081A /* Swift-Units */ = {
 			isa = PBXGroup;
 			children = (
+				E6427E6C1C52602E00E7DC30 /* Units.swift */,
 				E632F65E1C411BAA00B5081A /* AppDelegate.swift */,
 				E632F6601C411BAA00B5081A /* ViewController.swift */,
 				E632F6621C411BAA00B5081A /* Assets.xcassets */,
@@ -194,6 +197,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E632F6611C411BAA00B5081A /* ViewController.swift in Sources */,
+				E6427E6D1C52602E00E7DC30 /* Units.swift in Sources */,
 				E632F65F1C411BAA00B5081A /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -377,6 +381,7 @@
 				E632F6771C411BAB00B5081A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E632F6781C411BAB00B5081A /* Build configuration list for PBXNativeTarget "Swift-UnitsTests" */ = {
 			isa = XCConfigurationList;
@@ -385,6 +390,7 @@
 				E632F67A1C411BAB00B5081A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

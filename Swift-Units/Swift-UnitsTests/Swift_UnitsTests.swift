@@ -22,8 +22,8 @@ class Swift_UnitsTests: XCTestCase {
     }
     
     func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        let force = Mass(kg: 2) * gravity
+        XCTAssertEqualWithAccuracy(force.N, 9.80665 * 2, accuracy: 0.01)
     }
     
     func testPerformanceExample() {
