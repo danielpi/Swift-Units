@@ -22,6 +22,23 @@ public protocol Quantity {
 
 */
 
+/*
+Quantity - property of a phenomenon, body, or substance, where the property has a magnitude that can be expressed as a number and a reference
+Kind of Quantity
+system of quantities - set of quantities together with a set of non- contradictory equations relating those quantities
+Base Quantity - quantity in a conventionally chosen subset of a given system of quantities, where no subset quantity can be expressed in terms of the others
+Derived quantity - quantity, in a system of quantities, defined in terms of the base quantities of that system
+Quantity Dimension - dimension of a quantity dimension
+expression of the dependence of a quantity on the base quantities of a system of quantities as a product of powers of factors corresponding to the base quantities, omitting any numerical factor
+
+Measurement Unit - real scalar quantity, defined and adopted by convention, with which any other quantity of the same kind can be compared to express the ratio of the two quantities as a number
+Dimensions - a measurable extent of a particular kind, such as length, breadth, depth, or height.
+Units -
+
+
+
+*/
+
 public extension Unit {
     public init(value: Double, prefix: Prefix) {
         self.init(value: value)
