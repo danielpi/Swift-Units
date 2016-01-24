@@ -23,6 +23,9 @@ public protocol Quantity {
 */
 
 /*
+https://en.wikipedia.org/wiki/Joint_Committee_for_Guides_in_Metrology#VIM:_International_vocabulary_of_metrology
+https://en.wikipedia.org/wiki/International_System_of_Units
+
 Quantity - property of a phenomenon, body, or substance, where the property has a magnitude that can be expressed as a number and a reference
 Kind of Quantity
 system of quantities - set of quantities together with a set of non- contradictory equations relating those quantities
@@ -481,31 +484,22 @@ public struct Power: Unit {
     public var value: Double
     public let baseSymbol = "W"
     
-    public var W: Double {
-        return value
-    }
-    public var kW: Double {
-        return value / 1000
-    }
-    public var MW: Double {
-        return value / 1_000_000
-    }
-    
     public init(floatLiteral: FloatLiteralType) {
         self.value = Double(floatLiteral)
     }
     public init(value: Double) {
         self.value = value
     }
-    public init(W: Double) {
-        self.value = W
-    }
-    public init(kW: Double) {
-        self.value = 1000 * kW
-    }
-    public init(MW: Double) {
-        self.value = 1_000_000 * MW
-    }
+    
+    public var mW: Double { return value / Prefix.milli.rawValue }
+    public var W: Double { return value }
+    public var kW: Double { return value / Prefix.kilo.rawValue }
+    public var MW: Double { return value / Prefix.mega.rawValue }
+    
+    public init(mW: Double) { self.value = Prefix.milli.rawValue * mW }
+    public init(W: Double) { self.value = W }
+    public init(kW: Double) { self.value = Prefix.kilo.rawValue * kW }
+    public init(MW: Double) { self.value = Prefix.mega.rawValue * MW }
 }
 
 public struct Time: Unit {
@@ -807,12 +801,7 @@ public func * (lhs: Length, rhs: Area) -> Volume {
     return Volume(value: lhs.m * rhs.m2)
 }
 
-public func * (lhs: Voltage, rhs: Current) -> Power {
-    return Power(W: lhs.V * rhs.A)
-}
-public func * (lhs: Current, rhs: Voltage) -> Power {
-    return Power(W: lhs.A * rhs.V)
-}
+
 
 // MARK: Division
 public func / (lhs: MassFlowRate, rhs: Velocity) -> MassPerLength {
@@ -865,7 +854,7 @@ public struct Work: Unit {
     public var value: Double
     public let baseSymbol = "J"
     
-    public init(floatLiteral value: Self.FloatLiteralType) {
+    public init(floatLiteral: FloatLiteralType) {
         self.value = Double(floatLiteral)
     }
     public init(value: Double) {
@@ -880,7 +869,7 @@ public struct Charge: Unit {
     public var value: Double
     public let baseSymbol = "C"
 
-    public init(floatLiteral value: Self.FloatLiteralType) {
+    public init(floatLiteral: FloatLiteralType) {
         self.value = Double(floatLiteral)
     }
     public init(value: Double) {
@@ -921,6 +910,49 @@ public struct Current: Unit {
     public init(A: Double) { self.value = A }
     public init(kA: Double) { self.value = Prefix.kilo.rawValue * kA }
 }
+
+// P = VI
+public func * (lhs: Voltage, rhs: Current) -> Power { return Power(W: lhs.V * rhs.A) }
+public func * (lhs: Current, rhs: Voltage) -> Power { return Power(W: lhs.A * rhs.V) }
+public func / (lhs: Power, rhs: Voltage) -> Current { return Current(A: lhs.W / rhs.V) }
+public func / (lhs: Power, rhs: Current) -> Voltage { return Voltage(V: lhs.W / rhs.A) }
+
+public struct Resistance: Unit {
+    public var value: Double
+    public let baseSymbol = "Ω"
+    
+    public init(value: Double) {
+        self.value = value
+    }
+    public init(floatLiteral: FloatLiteralType) {
+        self.value = Double(floatLiteral)
+    }
+    
+    public var R: Double { return value }
+    public var Ω: Double { return value }
+    public var kR: Double { return value / Prefix.kilo.rawValue }
+    public var kΩ: Double { return value / Prefix.kilo.rawValue }
+    public var MR: Double { return value / Prefix.mega.rawValue }
+    public var MΩ: Double { return value / Prefix.mega.rawValue }
+    
+    public init(R: Double) { self.value = R }
+    public init(Ω: Double) { self.value = Ω }
+    public init(kR: Double) { self.value = Prefix.kilo.rawValue * kR }
+    public init(kΩ: Double) { self.value = Prefix.kilo.rawValue * kΩ }
+    public init(MR: Double) { self.value = Prefix.mega.rawValue * MR }
+    public init(MΩ: Double) { self.value = Prefix.mega.rawValue * MΩ }
+}
+
+// V = IR
+public func * (lhs: Current, rhs: Resistance) -> Voltage { return Voltage(V: lhs.A * rhs.Ω) }
+public func * (lhs: Resistance, rhs: Current) -> Voltage { return Voltage(V: lhs.Ω * rhs.A) }
+public func / (lhs: Voltage, rhs: Current) -> Resistance { return Resistance(Ω: lhs.V / rhs.A) }
+public func / (lhs: Voltage, rhs: Resistance) -> Current { return Current(A: lhs.V / rhs.Ω) }
+
+// P = I^2 R
+// P = V^2 / R
+
+
 
 // Horowitz and Hill Page 2
 
