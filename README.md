@@ -10,9 +10,18 @@ I've been learning Swift lately and one of the nicest features of the language i
 Turns out heaps of others have already tried this. Here are some examples
 - units in Haskell, <https://github.com/goldfirere/units>
 - Units of Measure in F#, <http://research.microsoft.com/en-us/um/people/akenn/units/index.html>
+- https://futureboy.us/frinkdata/units.txt
 
 I also shouldn't forget about significant digits (precision) and measurement uncertainty (e.g., 5 +- 0.2 meters) 
 - http://hep.physics.indiana.edu/~rickv/Quantities.html
 - http://www.roboticsengineeringcte502.com/blog---computational-scientist/why-computing-with-measured-quantities-is-hard
 
+
 Grab the playground and try it out.
+
+
+
+## More thoughts
+- How do I handle loss of resolution if the values are always converted back to a base unit? Resolution improvement is kind of the point of units in the first place. The programmer is in the best position to pick which order of magnitude they would like the calculation to be run in. On the other hand for most calculations (that would normally be performed by an engineer on paper) it doesn't make much difference.
+- Generic. Units should be generic. In particular Integer values with units would be handy.
+- Could it be possible to extend the base types Int and Float such that they can be tagged with a unit?

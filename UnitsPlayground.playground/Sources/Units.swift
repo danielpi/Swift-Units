@@ -1,7 +1,7 @@
 import Cocoa
 
 // MARK: Base Protocol
-public protocol Unit: CustomStringConvertible, FloatLiteralConvertible {
+public protocol Unit: CustomStringConvertible, ExpressibleByFloatLiteral {
     var value: Double { get set }
     var baseSymbol: String { get }
     
@@ -18,21 +18,21 @@ public extension Unit {
         return "\(String(format: "%.1f", value))\(baseSymbol)"
     }
     
-    public func value(prefix: Prefix) -> Double {
+    public func value(_ prefix: Prefix) -> Double {
         return value / prefix.rawValue
     }
     
-    public func string(prefix: Prefix) -> String {
+    public func string(_ prefix: Prefix) -> String {
         return "\(String(format: "%.1f", self.value(prefix)))\(prefix)\(baseSymbol)"
     }
 }
 
 public extension Unit {
-    static func convertToBase(prefix: Prefix, power: Double, value: Double) -> Double {
+    static func convertToBase(_ prefix: Prefix, power: Double, value: Double) -> Double {
         return pow(prefix.rawValue, power) * value
     }
     
-    static func convertToPrefix(prefix: Prefix, power: Double, value: Double) -> Double {
+    static func convertToPrefix(_ prefix: Prefix, power: Double, value: Double) -> Double {
         return value / pow(prefix.rawValue, power)
     }
 }
@@ -174,7 +174,8 @@ public struct Volume: Unit {
     public init(mm3: Double) { self.value = Volume.convertToBase(.milli, power: power, value: mm3) }
     
     public init(l: Length, w: Length, d: Length) {
-        self.value = (l * w * d).m3
+        let area = w * d
+        self.value = (l * area).m3
     }
     public init(area: Area, length: Length) {
         self.value = (area * length).m3
@@ -493,6 +494,9 @@ public struct Time: Unit {
     public var msec: Double {
         return 1000 * value
     }
+    public var frequency: Frequency {
+        return Frequency(Hz: 1 / self.value)
+    }
     
     public init(floatLiteral: FloatLiteralType) {
         self.value = Double(floatLiteral)
@@ -511,6 +515,42 @@ public struct Time: Unit {
     }
     public init(msec: Double) {
         self.value = msec / 1000
+    }
+}
+
+public struct Frequency: Unit {
+    public var value: Double
+    public let baseSymbol = "Hz"
+    public var Hz: Double {
+        return value
+    }
+    public var kHz: Double {
+        return value / 1000
+    }
+    public var MHz: Double {
+        return value / 1000 / 1000
+    }
+    public var GHz: Double {
+        return value / 1000 / 1000 / 1000
+    }
+    
+    public init(floatLiteral: FloatLiteralType) {
+        self.value = Double(floatLiteral)
+    }
+    public init(value: Double) {
+        self.value = value
+    }
+    public init(Hz: Double) {
+        self.value = Hz
+    }
+    public init(kHz: Double) {
+        self.value = 1000 * kHz
+    }
+    public init(MHz: Double) {
+        self.value = 1000 * 1000 * MHz
+    }
+    public init(GHz: Double) {
+        self.value = 1000 * 1000 * 1000 * GHz
     }
 }
 
@@ -644,7 +684,7 @@ public struct Latitude: Unit {
     var _value: Double = 0
     public var value: Double {
         set {
-            func iter(v: Double) -> Double {
+            func iter(_ v: Double) -> Double {
                 switch v {
                 case let a where a > (M_PI / 2):
                     return iter(a - M_PI)
@@ -692,7 +732,7 @@ public struct Longitude: Unit {
     var _value: Double = 0
     public var value: Double {
         set {
-            func iter(v: Double) -> Double {
+            func iter(_ v: Double) -> Double {
                 switch v {
                 case let a where a > M_PI:
                     return iter(a - (2 * M_PI))
@@ -747,7 +787,7 @@ public struct Coordinate: CustomStringConvertible {
         self.longitude = longitude
     }
     
-    public func distanceFrom(coordinate: Coordinate) -> Length {
+    public func distanceFrom(_ coordinate: Coordinate) -> Length {
         let(dLat, dLon) = (latitude - coordinate.latitude, longitude - coordinate.longitude)
         let (sqSinLat, sqSinLon) = (pow(sin(dLat.radians / 2.0), 2.0), pow(sin(dLon.radians / 2.0), 2.0))
         let a = sqSinLat + sqSinLon * cos(latitude.radians) * cos(coordinate.latitude.radians)
@@ -779,6 +819,13 @@ public func * (lhs: Velocity, rhs: Area) -> VolumeFlowRate {
 
 public func * (lhs: Length, rhs: Length) -> Area {
     return Area(m2: lhs.m * rhs.m)
+}
+
+public func * (lhs: Length, rhs: Area) -> Volume {
+    return Volume(m3: lhs.m * rhs.m2)
+}
+public func * (lhs: Area, rhs: Length) -> Volume {
+    return Volume(m3: lhs.m2 * rhs.m)
 }
 
 public func * (lhs: MassPerLength, rhs: Length) -> Mass {
@@ -821,13 +868,6 @@ public func * (lhs: Torque, rhs: AngularVelocity) -> Power {
 }
 public func * (lhs: AngularVelocity, rhs: Torque) -> Power {
     return Power(W: lhs.radps * rhs.Nm)
-}
-
-public func * (lhs: Area, rhs: Length) -> Volume {
-    return Volume(value: lhs.m2 * rhs.m)
-}
-public func * (lhs: Length, rhs: Area) -> Volume {
-    return Volume(value: lhs.m * rhs.m2)
 }
 
 public func * (lhs: Voltage, rhs: Current) -> Power {
